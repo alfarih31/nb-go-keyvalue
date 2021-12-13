@@ -1,8 +1,8 @@
 # Noob-KeyValue
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/alfarih31/nb-go-keyvalue.svg)](https://pkg.go.dev/github.com/alfarih31/nb-go-keyvalue)
-![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/alfarih31/nb-go-http-keyvalue?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/alfarih31/nb-go-http-keyvalue?style=flat-square)
+![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/alfarih31/nb-go-keyvalue?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/alfarih31/nb-go-keyvalue?style=flat-square)
 
 Noob KeyValue is utilities for golang to working with `Map` data-types with `String` Keys (`map[string]interface{}`), such as:
 - Assigning `Map` to `Map`
@@ -14,10 +14,8 @@ Noob KeyValue is utilities for golang to working with `Map` data-types with `Str
 ## Contents
 
 - [Noob-KeyValue](#Noob-KeyValue)
-  - [TODO](#TODO)
-
-## TODO
-- [ ] Write unit test
+  - [Installation](#Installation)
+  - [Quick Start & Usage](#Quick)
 
 ## Installation
 
