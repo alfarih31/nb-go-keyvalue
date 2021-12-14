@@ -51,7 +51,12 @@ func (k KeyValue) AssignTo(target KeyValue, replaceExist ...bool) {
 		t := reflect.TypeOf(targetValue)
 		isZero := true
 		if t != nil {
-			isZero = targetValue == reflect.Zero(t).Interface()
+			// If kind is `slice` or `Array` then always decide as zero
+			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
+				isZero = true
+			} else {
+				isZero = targetValue == reflect.Zero(t).Interface()
+			}
 		}
 
 		// If exist but don't replace exist then continue
@@ -87,7 +92,12 @@ func (k KeyValue) Assign(source KeyValue, replaceExist ...bool) {
 		t := reflect.TypeOf(existingValue)
 		isZero := true
 		if t != nil {
-			isZero = existingValue == reflect.Zero(t).Interface()
+			// If kind is `slice` or `Array` then always decide as zero
+			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
+				isZero = true
+			} else {
+				isZero = existingValue == reflect.Zero(t).Interface()
+			}
 		}
 
 		// If exist & not zero value but don't replace exist then continue
