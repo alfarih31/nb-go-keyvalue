@@ -53,7 +53,7 @@ func (k KeyValue) AssignTo(target KeyValue, replaceExist ...bool) {
 		if t != nil {
 			// If kind is `slice` or `Array` then always decide as zero
 			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
-				isZero = true
+				isZero = false
 			} else {
 				isZero = targetValue == reflect.Zero(t).Interface()
 			}
@@ -94,7 +94,7 @@ func (k KeyValue) Assign(source KeyValue, replaceExist ...bool) {
 		if t != nil {
 			// If kind is `slice` or `Array` then always decide as zero
 			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
-				isZero = true
+				isZero = false
 			} else {
 				isZero = existingValue == reflect.Zero(t).Interface()
 			}
