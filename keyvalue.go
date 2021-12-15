@@ -51,8 +51,8 @@ func (k KeyValue) AssignTo(target KeyValue, replaceExist ...bool) {
 		t := reflect.TypeOf(targetValue)
 		isZero := true
 		if t != nil {
-			// If kind is `slice` or `Array` then always decide as zero
-			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
+			// If kind is `slice` or `Array` or `Map` then always decide as zero
+			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array || t.Kind() == reflect.Map {
 				isZero = false
 			} else {
 				isZero = targetValue == reflect.Zero(t).Interface()
@@ -92,8 +92,8 @@ func (k KeyValue) Assign(source KeyValue, replaceExist ...bool) {
 		t := reflect.TypeOf(existingValue)
 		isZero := true
 		if t != nil {
-			// If kind is `slice` or `Array` then always decide as zero
-			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
+			// If kind is `slice` or `Array` or `Map` then always decide as zero
+			if t.Kind() == reflect.Slice || t.Kind() == reflect.Array || t.Kind() == reflect.Map {
 				isZero = false
 			} else {
 				isZero = existingValue == reflect.Zero(t).Interface()
