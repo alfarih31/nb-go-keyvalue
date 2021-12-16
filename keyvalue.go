@@ -1,3 +1,4 @@
+// Package keyvalue provide an ability to working with Key-Value pair in golang `map[string]interface{} types`
 package keyvalue
 
 import (
@@ -9,6 +10,7 @@ import (
 
 type KeyValue map[string]interface{}
 
+// JSON return `map[string]string` as represent of JSON object
 func (k KeyValue) JSON() map[string]string {
 	o := map[string]string{}
 	for key, val := range k {
@@ -18,6 +20,7 @@ func (k KeyValue) JSON() map[string]string {
 	return o
 }
 
+// ToMap return `map[string]interface{}` as purpose to cast back KeyValue
 func (k KeyValue) ToMap() map[string]interface{} {
 	o := map[string]interface{}{}
 	for key, val := range k {
@@ -27,6 +30,7 @@ func (k KeyValue) ToMap() map[string]interface{} {
 	return o
 }
 
+// AssignTo will assign Value from a KeyValue to other KeyValue with corresponding `Key`. This method is an opposite of Assign and return value by `in-place` operation.
 func (k KeyValue) AssignTo(target KeyValue, replaceExist ...bool) {
 	rExist := false
 	if len(replaceExist) > 0 {
@@ -68,6 +72,8 @@ func (k KeyValue) AssignTo(target KeyValue, replaceExist ...bool) {
 	}
 }
 
+// Assign will assign Value by other KeyValue. This method inspired by JavaScript `Object.assign()` method
+// Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 func (k KeyValue) Assign(source KeyValue, replaceExist ...bool) {
 	rExist := false
 	if len(replaceExist) > 0 {
@@ -109,6 +115,7 @@ func (k KeyValue) Assign(source KeyValue, replaceExist ...bool) {
 	}
 }
 
+// Keys return Array of Keys of KeyValue
 func (k KeyValue) Keys() []string {
 	var keys []string
 	for key := range k {
@@ -117,6 +124,7 @@ func (k KeyValue) Keys() []string {
 	return keys
 }
 
+// Values return Array of Values of KeyValue
 func (k KeyValue) Values() []interface{} {
 	var values []interface{}
 	for _, val := range k {
@@ -126,11 +134,13 @@ func (k KeyValue) Values() []interface{} {
 	return values
 }
 
+// String method will format the KeyValue in JSON format when calling such methods `string(KeyValue)` or fmt.Println(KeyValue)`
 func (k KeyValue) String() string {
 	j, _ := json.Marshal(k)
 	return string(j)
 }
 
+// IsAbleToConvert check whether an interface could be able to cast to KeyValue
 func IsAbleToConvert(p interface{}) bool {
 	t := reflect.TypeOf(p)
 	name := t.Name()
@@ -150,6 +160,7 @@ func IsAbleToConvert(p interface{}) bool {
 	return true
 }
 
+// Unmarshal KeyValue to a Struct
 func (k KeyValue) Unmarshal(i interface{}) error {
 	err := json.Unmarshal([]byte(k.String()), i)
 
@@ -174,6 +185,7 @@ func structToMap(strct interface{}) (map[string]interface{}, error) {
 	return t, nil
 }
 
+// FromStruct create a KeyValue from Struct
 func FromStruct(strct interface{}) (KeyValue, error) {
 	if !IsAbleToConvert(strct) {
 		return nil, errors.New("cannot convert")
