@@ -199,6 +199,17 @@ func FromStruct(strct interface{}) (KeyValue, error) {
 
 	kv := KeyValue{}
 	for key, val := range mapString {
+		if val != nil {
+			t := reflect.TypeOf(val)
+			if t.Kind() == reflect.Map {
+				kv[key], err = FromStruct(val)
+				if err != nil {
+					return nil, err
+				}
+				continue
+			}
+		}
+
 		kv[key] = val
 	}
 
