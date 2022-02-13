@@ -40,35 +40,19 @@ func (k KeyValue) AssignTo(target KeyValue, replaceExist ...bool) {
 	for key, val := range k {
 		targetValue, exist := target[key]
 
-		// Recursive assign
-		vval := reflect.TypeOf(val)
-		vtval := reflect.TypeOf(targetValue)
+		// Recursive assignTo
+		if isKeyValue(val) && isKeyValue(targetValue) {
+			sourceKvVal, _ := FromStruct(val)
+			targetKvVal, _ := FromStruct(targetValue)
 
-		if vval != nil && vtval != nil {
-			if vval.Kind() == reflect.Map && vtval.Kind() == reflect.Map || (vval.Name() == "KeyValue" && vtval.Name() == "KeyValue") {
-				sourceKvVal, _ := FromStruct(val)
-				targetKvVal, _ := FromStruct(targetValue)
+			sourceKvVal.AssignTo(targetKvVal, rExist)
 
-				sourceKvVal.AssignTo(targetKvVal, rExist)
-
-				target[key] = targetKvVal
-				continue
-			}
-		}
-
-		// Check is target is zero value
-		isZero := true
-		if vtval != nil {
-			// If kind is `slice` or `Array` or `Map` then always decide as not zero
-			if vtval.Kind() == reflect.Slice || vtval.Kind() == reflect.Array || vtval.Kind() == reflect.Map {
-				isZero = false
-			} else {
-				isZero = targetValue == reflect.Zero(vtval).Interface()
-			}
+			target[key] = targetKvVal
+			continue
 		}
 
 		// If exist but don't replace exist then continue
-		if exist && !rExist && !isZero {
+		if exist && !rExist && !hasZeroValue(targetValue) {
 			continue
 		}
 
@@ -88,33 +72,19 @@ func (k KeyValue) Assign(source KeyValue, replaceExist ...bool) {
 		existingValue, exist := k[key]
 
 		// Recursive assign
-		vval := reflect.TypeOf(val)
-		veval := reflect.TypeOf(existingValue)
 
-		if vval != nil && veval != nil {
-			if vval.Kind() == reflect.Map && veval.Kind() == reflect.Map || (vval.Name() == "KeyValue" && veval.Name() == "KeyValue") {
-				sourceKvVal, _ := FromStruct(val)
-				existingKvVal, _ := FromStruct(existingValue)
+		if isKeyValue(val) && isKeyValue(existingValue) {
+			sourceKvVal, _ := FromStruct(val)
+			existingKvVal, _ := FromStruct(existingValue)
 
-				existingKvVal.Assign(sourceKvVal, rExist)
+			existingKvVal.Assign(sourceKvVal, rExist)
 
-				k[key] = existingKvVal
-				continue
-			}
-		}
-
-		isZero := true
-		if veval != nil {
-			// If kind is `slice` or `Array` or `Map` then always decide as non zero
-			if veval.Kind() == reflect.Slice || veval.Kind() == reflect.Array || veval.Kind() == reflect.Map || veval.Name() == "KeyValue" {
-				isZero = false
-			} else {
-				isZero = existingValue == reflect.Zero(veval).Interface()
-			}
+			k[key] = existingKvVal
+			continue
 		}
 
 		// If exist & not zero value but don't replace exist then continue
-		if exist && !rExist && !isZero {
+		if exist && !rExist && !hasZeroValue(existingValue) {
 			continue
 		}
 
@@ -145,21 +115,6 @@ func (k KeyValue) Values() []interface{} {
 func (k KeyValue) String() string {
 	j, _ := json.Marshal(k)
 	return string(j)
-}
-
-// IsAbleToConvert check whether an interface could be able to cast to KeyValue
-func IsAbleToConvert(p interface{}) bool {
-	t := reflect.TypeOf(p)
-	kind := t.Kind()
-
-	switch kind {
-	case reflect.Map:
-		fallthrough
-	case reflect.Struct:
-		return true
-	}
-
-	return true
 }
 
 // Unmarshal KeyValue to a Struct
